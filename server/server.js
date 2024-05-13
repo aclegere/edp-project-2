@@ -34,6 +34,81 @@ app.get("/api/planets", async (req, res) => {
   }
 });
 
+//get request for films/id/characters
+app.get("/api/films/:id/characters", async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const client = await MongoClient.connect(url);
+    const db = client.db(dbName);
+    const collection = db.collection(collectionFilmsCharacters);
+    const filmsCharacters = await collection.find({ "film_id": id}).toArray();
+    res.json(filmsCharacters);
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).send("No characters found in this film!");
+  }
+});
+
+app.get("/api/films/:id/planets", async (req, res) => {
+  try {
+    const id  = parseInt(req.params.id);
+    const client = await MongoClient.connect(url);
+    const db = client.db(dbName);
+    const collection = db.collection(collectionFilmsPlanets);
+    const filmsPlanets = await collection.find({ "film_id": id }).toArray();
+    res.json(filmsPlanets);
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).send("No planets found in this film!");
+  }
+});
+
+app.get("/api/characters/:id/films", async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const client = await MongoClient.connect(url);
+    const db = client.db(dbName);
+    const collection = db.collection(collectionFilmsCharacters);
+    const charactersFilms = await collection.find({ "character_id": id }).toArray();
+    res.json(charactersFilms);
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).send("No films found for this character!");
+  }
+}); 
+
+app.get("/api/planets/:id/films", async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const client = await MongoClient.connect(url);
+    const db = client.db(dbName);
+    const collection = db.collection(collectionFilmsPlanets);
+    const planetsFilms = await collection.find({ "planet_id": id }).toArray();
+    res.json(planetsFilms);
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).send("No films found for this planet!");
+  }
+}); 
+
+app.get("/api/planets/:id/characters", async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const client = await MongoClient.connect(url);
+    const db = client.db(dbName);
+    const collection = db.collection(collectionCharacters);
+    const planetCharacters = await collection.find({ "homeworld": id }).toArray();
+    res.json(planetCharacters);
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).send("No characters found for this planet!");
+  }
+}); 
+
+
+
+
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
