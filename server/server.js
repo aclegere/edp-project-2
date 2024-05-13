@@ -9,7 +9,11 @@ dotenv.config();
 
 const url = process.env.MONGO_DB_URL;
 const dbName = process.env.MONGO_DB;
-const collectionName = process.env.MONGO_DB_COLLECTION;
+const collectionPlanets = process.env.COLLECTION_PLANETS;
+const collectionFilms = process.env.COLLECTION_FILMS;
+const collectionCharacters = process.env.COLLECTION_CHARACTERS;
+const collectionFilmsCharacters = process.env.COLLECTION_FILMS_CHARACTERS;
+const collectionFilmsPlanets = process.env.COLLECTION_FILMS_PLANETS;
 
 const app = express();
 app.use(cors()); // Enable CORS for all routes
@@ -21,7 +25,7 @@ app.get("/api/planets", async (req, res) => {
   try {
     const client = await MongoClient.connect(url);
     const db = client.db(dbName);
-    const collection = db.collection(collectionName);
+    const collection = db.collection(collectionPlanets);
     const planets = await collection.find({}).toArray();
     res.json(planets);
   } catch (err) {
